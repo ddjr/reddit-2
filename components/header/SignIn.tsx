@@ -5,7 +5,7 @@ function SignIn() {
   const { data: session } = useSession()
   return (
     <div
-      className=" flex cursor-pointer items-center space-x-2 border border-gray-100 p-2"
+      className=" flex cursor-pointer items-center space-x-2 border border-gray-100 p-1"
       onClick={() => (session ? signOut() : signIn())}
     >
       <div className="relative h-5 w-5 flex-shrink-0">
