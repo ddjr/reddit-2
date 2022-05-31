@@ -1,4 +1,4 @@
-type Comment = {
+type Comment123 = {
 	created_at: string
 	id: number
 	post_id: number
@@ -29,6 +29,6 @@ type Post = {
 	title: string
 	username: string
 	voteList: Vote[]
-	commentList: Comment[]
+	commentList: Comment123[]
 	subreddit: Subreddit
 }

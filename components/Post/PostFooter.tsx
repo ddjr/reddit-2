@@ -7,7 +7,7 @@ import {
 } from '@heroicons/react/outline'
 
 interface Props {
-	commentList: Comment[]
+	commentList: Comment123[]
 }
 function PostFooter({ commentList }: Props) {
 	return (
