@@ -25,7 +25,11 @@ type Post {
 	subreddit_id: ID
 	title: String
 	username: String
-	voteList: [Vote] @materializer(query: "getVoteUsingPost_id")
+	voteList: [Vote]
+		@materializer(
+			query: "getVotesByPostId"
+			arguments: [{ name: "post_id", field: "id" }]
+		)
 }
 
 type Subreddit {
@@ -44,7 +48,7 @@ type Vote {
 			arguments: [{ name: "id", field: "post_id" }]
 		)
 	post_id: ID
-	upvote: Int
+	upvote: Boolean
 	username: String
 }
 
@@ -93,13 +97,12 @@ type Query {
 			"""
 			configuration: "postgresql_config"
 		)
-	getVoteUsingPost_id(id: ID!): [Vote]
+	getVotesByPostId(post_id: ID!): [Vote]
 		@dbquery(
 			type: "postgresql"
 			query: """
-			SELECT T."created_at", T."id", T."post_id", T."upvote", T."username"
-			  FROM "public"."vote" T
-			  WHERE T."post_id" = $1
+			select * from "vote" where "post_id" = $1
+			order by "created_at" desc
 			"""
 			configuration: "postgresql_config"
 		)
@@ -108,6 +111,17 @@ type Query {
 			type: "postgresql"
 			schema: "public"
 			table: "subreddit"
+			configuration: "postgresql_config"
+		)
+	getSubredditListLimit(limit: Int!): [Subreddit]
+		@dbquery(
+			type: "postgresql"
+			schema: "public"
+			query: """
+			select * from "subreddit"
+			order by "created_at" desc
+			limit $1
+			"""
 			configuration: "postgresql_config"
 		)
 	getSubredditByTopic(topic: String!): [Subreddit]
@@ -222,12 +236,7 @@ type Mutation {
 			dml: DELETE
 			configuration: "postgresql_config"
 		)
-	insertVote(
-		post_id: ID!
-		created_at: DateTime!
-		upvote: Int!
-		username: String!
-	): Vote
+	insertVote(post_id: ID!, upvote: Boolean!, username: String!): Vote
 		@dbquery(
 			type: "postgresql"
 			schema: "public"

@@ -1,4 +1,4 @@
-import Avatar from './Avatar'
+import Avatar from '../Avatar'
 import ReactTimeago from 'react-timeago'
 type Props = {
 	username: string
