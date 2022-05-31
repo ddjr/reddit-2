@@ -1,21 +1,9 @@
-import {
-	ArrowDownIcon,
-	ArrowUpIcon,
-	BookmarkIcon,
-	ChatAltIcon,
-	DotsHorizontalIcon,
-	GiftIcon,
-	ShareIcon
-} from '@heroicons/react/outline'
-import Avatar from '../Avatar'
-import TimeAgo from 'react-timeago'
 import Vote from './Vote'
 import PostFooter from './PostFooter'
 import PostHeader from './PostHeader'
 import PostBody from './PostBody'
 import Link from 'next/link'
 import { Jelly } from '@uiball/loaders'
-import toast from 'react-hot-toast'
 type Props = {
 	post: Post
 }
