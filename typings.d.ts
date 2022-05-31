@@ -22,7 +22,7 @@ type Subreddit = {
 
 type Post = {
 	body: string
-	created_at: Date
+	created_at: string
 	id: number
 	image: string
 	subreddit_id: number

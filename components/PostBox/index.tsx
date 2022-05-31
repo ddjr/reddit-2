@@ -15,8 +15,10 @@ type FormData = {
 	postImage: string
 	subreddit: string
 }
-
-function PostBox() {
+type Props = {
+	subreddit?: string
+}
+function PostBox({ subreddit }: Props) {
 	const { data: session } = useSession()
 	const [addPost] = useMutation(ADD_POST, {
 		refetchQueries: [GET_ALL_POSTS, 'getPostList']
@@ -40,7 +42,7 @@ function PostBox() {
 			} = await client.query({
 				query: GET_SUBREDDIT_BY_TOPIC,
 				variables: {
-					topic: formData.subreddit
+					topic: subreddit || formData.subreddit
 				}
 			})
 			const subredditExists = getSubredditByTopic.length > 0
@@ -51,7 +53,7 @@ function PostBox() {
 					data: { insertSubreddit: newSubreddit }
 				} = await addSubreddit({
 					variables: {
-						topic: formData.subreddit
+						topic: subreddit || formData.subreddit
 					}
 				})
 				console.log(newSubreddit)
@@ -85,7 +87,7 @@ function PostBox() {
 	return (
 		<form
 			onSubmit={onSubmit}
-			className="sticky top-16 z-50 rounded-md border border-gray-300 bg-white p-2"
+			className="sticky top-[3.8rem] z-50 rounded-md border border-gray-300 bg-white p-2"
 		>
 			<div className="flex items-center space-x-3">
 				<Avatar />
@@ -95,7 +97,11 @@ function PostBox() {
 					className="flex-1 rounded-md bg-gray-50 p-2 pl-5 outline-none"
 					type="text"
 					placeholder={
-						session ? 'Create a post by entering a title!' : 'Sign in to post'
+						session
+							? subreddit
+								? `Create a post in r/${subreddit}`
+								: 'Create a post by entering a title!'
+							: 'Sign in to post'
 					}
 				/>
 				<PhotographIcon
@@ -120,15 +126,17 @@ function PostBox() {
 							placeholder="Text (optional)"
 						/>
 					</div>
-					<div className="flex items-center pl-2">
-						<p className="min-w-[90px]">Subreddit:</p>
-						<input
-							className="m-2 mr-0 flex-1 rounded-md bg-blue-50 px-2 outline-none"
-							{...register('subreddit', { required: true })}
-							type="text"
-							placeholder="i.e reactjs"
-						/>
-					</div>
+					{!subreddit && (
+						<div className="flex items-center pl-2">
+							<p className="min-w-[90px]">Subreddit:</p>
+							<input
+								className="m-2 mr-0 flex-1 rounded-md bg-blue-50 px-2 outline-none"
+								{...register('subreddit', { required: true })}
+								type="text"
+								placeholder="i.e reactjs"
+							/>
+						</div>
+					)}
 					{imageBoxOpen && (
 						<div className="flex items-center pl-2">
 							<p className="min-w-[90px]">Image URL:</p>

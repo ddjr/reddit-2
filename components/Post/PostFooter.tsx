@@ -9,7 +9,7 @@ import {
 interface Props {
 	commentList: Comment[]
 }
-function PostActions({ commentList }: Props) {
+function PostFooter({ commentList }: Props) {
 	return (
 		<div className="flex space-x-4 text-gray-400">
 			<div className="postButtons">
@@ -34,4 +34,4 @@ function PostActions({ commentList }: Props) {
 		</div>
 	)
 }
-export default PostActions
+export default PostFooter
